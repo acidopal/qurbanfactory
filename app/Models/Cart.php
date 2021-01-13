@@ -11,12 +11,12 @@ class Cart extends Model
 
     protected $table = 'cart';
 
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'id_cart';
 
     public $timestamps = false;
 
     protected $fillable = [
-		'id_cart', 'id_user', 'id_product', 'quantity', 
+       'id_user', 'id_product', 'quantity', 
     ];
 
     public function getUser()

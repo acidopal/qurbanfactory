@@ -12,19 +12,29 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::group(['namespace' => 'Home', 'prefix' => ''], function(){
+    Route::get('/', 'HomeController@home')->name('home');
+    Route::get('/detail/{name}', 'HomeController@detail')->name('detail');
+    Route::get('/product/{id}', 'HomeController@getProduct')->name('get-product');
+});
+
 Route::group(['namespace' => 'User', 'prefix' => ''], function(){
-    Route::get('/', 'UserController@loginAdmin')->name('login-admin');
-    Route::post('/validate-login', 'UserController@validateLogin');
+    Route::get('/login', 'UserController@login')->name('login');
+    Route::post('/register', 'UserController@register')->name('register');
+    Route::post('/validate-login', 'UserController@validateLogin')->name('validate-login');
+    Route::get('/admin', 'UserController@loginAdmin')->name('login-admin');
     Route::get('/logout', 'UserController@logout')->name('logout');
+});
+
+Route::group(['namespace' => 'Cart', 'prefix' => ''], function(){
+    Route::get('/cart', 'CartController@index')->name('cart');
+    Route::post('/add-to-cart', 'CartController@addProductToCart')->name('add-to-cart');
 });
 
 Route::group(['middleware' => ['login-verification', 'revalidate']], function(){
     Route::group(['namespace' => 'Dashboard', 'prefix' => 'dashboard'], function(){
-        Route::get('/', 'DashboardController@index')->name('dashboard');
-        Route::post('/save', 'DashboardController@save');
-        Route::post('/data-table', 'DashboardController@dataTable');
-        Route::post('/form', 'DashboardController@form');
-        Route::post('/delete', 'DashboardController@delete');
+        Route::get('/', 'DashboardController@dashboardAdmin')->name('dashboard');
+        Route::get('/user', 'DashboardController@dashboardUser')->name('dashboard-user');
     });
 
     Route::group(['namespace' => 'Product', 'prefix' => 'product'], function(){
@@ -74,11 +84,9 @@ Route::group(['namespace' => 'Transaction', 'prefix' => 'transaction'], function
 
 });
 
-
 Route::group(['namespace' => 'Vtweb', 'prefix' => 'vtweb'], function(){
     Route::get('/', 'VtwebController@vtweb');
 });
-
 
 Route::group(['namespace' => 'Snap', 'prefix' => 'snap'], function(){
     Route::get('', 'SnapController@snap');

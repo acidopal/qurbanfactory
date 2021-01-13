@@ -1,4 +1,4 @@
-@extends('layout.main')
+@extends('layout.admin.main')
 @section('title', $title)
 @section('content')
 <section id="row-grouping">

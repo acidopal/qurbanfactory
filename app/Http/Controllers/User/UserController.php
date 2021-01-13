@@ -16,10 +16,49 @@ class UserController extends Controller
         $this->userBusinessLayer = new UserBusinessLayer();
     }
 
+    public function login(Request $request)
+    {
+        if ($request->session()->exists('activeUser')) {
+            return redirect('/dashboard/user');
+        }
+
+        $params = [
+            'title' => 'Login'
+        ];
+        
+        return view('shop.login.index', $params);
+    }
+
+    public function register(Request $request)
+    {
+        $name = $request->input('name');
+        $phoneNumber = $request->input('phone_number');
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $role = 'User';
+
+        $params = new UserDTO();
+        $params->setName($name);
+        $params->setPhoneNumber($phoneNumber);
+        $params->setEmail($email);
+        $params->setPassword($password);
+        $params->setRole($role);
+
+        $result = $this->userBusinessLayer->actionSave($params);
+
+        if($result['code'] == 200){
+            $request->session()->put('activeUser', $result['data']);
+            return redirect('/')->with('success', 'Registrasi berhasil');   
+        }else{
+            return redirect()->back()->with('errors', $result['message']);   
+        }
+      
+    }
+
     public function loginAdmin(Request $request)
     {
         if ($request->session()->exists('activeUser')) {
-            return redirect('/dashboard');
+            return redirect('/admin/dashboard');
         }
 
         $params = [
@@ -31,47 +70,20 @@ class UserController extends Controller
 
     public function validateLogin(Request $request)
     {
-        try{
-            $email = $request->input('email');
-            $password = $request->input('password');
+        $email = $request->input('email');
+        $password = $request->input('password');
 
-            $params = new UserDTO();
-            $params->setEmail($email);
-            $params->setPassword($password);
+        $params = new UserDTO();
+        $params->setEmail($email);
+        $params->setPassword($password);
 
-            $result = $this->userBusinessLayer->actionCheckLogin($params);
+        $result = $this->userBusinessLayer->actionCheckLogin($params);
 
-            if($result['code'] == 200){
-               $request->session()->put('activeUser', $result['data']);
-               return '
-                 <script>
-                     toastr.success("'.$result['message'].'", "Berhasil!", 
-                        { 
-                            "showMethod": "fadeIn", 
-                            "hideMethod": "fadeOut", 
-                            timeOut: 2000, 
-                            positionClass: "toast-bottom-right", 
-                            containerId: "toast-bottom-right"
-                         }
-                     );
-                     reload(1000);
-                </script>'; 
-            }else{
-                 return '
-                 <script>
-                     toastr.error("'.$result['message'].'", "Error !", 
-                        { 
-                            "showMethod": "fadeIn", 
-                            "hideMethod": "fadeOut", 
-                            timeOut: 2000, 
-                            positionClass: "toast-bottom-right", 
-                            containerId: "toast-bottom-right"
-                         }
-                     );
-                </script>'; 
-            }
-        }catch(\Exception $e){
-            return "<div class='alert alert-danger'>Terjadi kesalahan pada server <br>".$e->getMessage()."</div>";
+        if($result['code'] == 200){
+           $request->session()->put('activeUser', $result['data']);
+           return redirect('/')->with('success', 'login berhasil');   
+        }else{
+           return redirect()->back()->with('errors', $result['message']);   
         }
     }
 

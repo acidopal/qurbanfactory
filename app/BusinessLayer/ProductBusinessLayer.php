@@ -40,6 +40,24 @@ class ProductBusinessLayer extends GenericBusinessLayer
         return $response->getResponse();
     }
 
+    public function getProductsHome()
+    {
+        $data = Product::take(3)->get();
+        $response = new ResponseCreatorPresentationLayer(200,'Data tersedia!',$data);
+
+        return $response->getResponse();
+    }
+
+    public function getProductByName(ProductDTO $params)
+    {
+        $name = $params->getName();
+        $data = Product::where('name', $name)->first();
+
+        $response = new ResponseCreatorPresentationLayer(200,'Data tersedia!',$data);
+
+        return $response->getResponse();
+    }
+
     public function actionSave(ProductDTO $params)
     {
         try{

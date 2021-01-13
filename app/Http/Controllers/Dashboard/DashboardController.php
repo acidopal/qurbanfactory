@@ -15,13 +15,23 @@ class DashboardController extends Controller
         $this->dashboardBusinessLayer = new DashboardBusinessLayer();
     }
 
-    public function index()
+    public function dashboardAdmin()
     {
         $params = [
-            'title' => 'Dashboard'
+            'title' => 'Dashboard Admin'
         ];
 
         return view('admin.dashboard.index', $params);
+    }
+
+
+    public function dashboardUser()
+    {   
+        $params = [
+            'title' => 'Dashboard User'
+        ];
+
+        return view('shop.dashboard.index', $params);
     }
    
 }

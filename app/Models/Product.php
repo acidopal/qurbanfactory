@@ -21,6 +21,6 @@ class Product extends Model
 
     public function getProductCategory()
     {
-        return $this->hasOne('App\Models\ProductCategory', 'id_product_category', 'id_product_category');
+        return $this->hasOne('App\Models\ProductCategories', 'id_product_category', 'id_product_category');
     }
 }
