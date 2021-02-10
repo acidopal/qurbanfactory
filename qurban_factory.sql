@@ -714,10 +714,10 @@ CREATE TABLE `transaction` (
 
 CREATE TABLE `user` (
   `id_user` int(11) NOT NULL,
-  `name` int(64) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `email` varchar(32) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `phoneNumber` int(14) NOT NULL,
+  `phoneNumber` varchar(255) NOT NULL,
   `role` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
